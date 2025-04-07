@@ -1,0 +1,804 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeeyVision - Solusi IT</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Reset CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth; /* Add smooth scrolling */
+        }
+
+        body {
+            line-height: 1.6; /* Set a base line-height */
+            color: #333; /* Default text color */
+            /* Menonaktifkan pemilihan teks */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        /* Gaya Header */
+        header {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
+            url('https://images.unsplash.com/photo-1556761175-4b46a572b786?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGJ1c2luZXNzfGVufDB8fHx8MTY5NzY0NzQx&ixlib=rb-1.2.1&q=80&w=1080') center/cover no-repeat; /* Added no-repeat */
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 1rem 2rem;
+            position: relative; /* Added for potential future enhancements like sticky nav */
+            z-index: 10; /* Ensure nav is above background */
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #00a8ff;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+            padding: 0.5rem 0; /* Add padding for easier clicking */
+            position: relative; /* For hover effect */
+        }
+        /* Add a subtle underline hover effect */
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #00a8ff;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #00a8ff;
+        }
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Bagian Hero */
+        .hero {
+            text-align: center;
+            max-width: 800px;
+            margin: auto;
+            padding: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            animation: fadeIn 1s ease-out;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            animation: fadeIn 1.5s ease-out;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .cta-button {
+            background: #00a8ff;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 4px 10px rgba(0, 168, 255, 0.3);
+        }
+
+        .cta-button:hover {
+            background: #0097e6;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 151, 230, 0.4);
+        }
+        .cta-button:active {
+            transform: translateY(0);
+            box-shadow: 0 4px 10px rgba(0, 168, 255, 0.3);
+        }
+        /* Konten Pop-up Umum - Auto Responsive */
+        .popup-content {
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            position: fixed;
+            top: 5vh;
+            left: 50%;
+            transform: translateX(-50%);
+            display: none;
+            animation: fadeInScale 0.3s ease-out forwards;
+            z-index: 1001;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 1.5rem;
+            text-align: left;
+            font-family: 'Arial', sans-serif;
+            line-height: 1.8;
+            letter-spacing: 0.5px;
+        }
+
+        /* Animasi untuk popup */
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: translateX(-50%) scale(0.95); }
+            to { opacity: 1; transform: translateX(-50%) scale(1); }
+        }
+
+        .popup-content h2 {
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            color: #333;
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        .popup-content p {
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            color: #555;
+        }
+
+        .popup-content .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .popup-content button {
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            width: 100%;
+            text-align: center;
+        }
+        /* Style Tombol Close */
+        #popupCloseButton {
+            background: #6c757d;
+            box-shadow: 0 4px 10px rgba(108, 117, 125, 0.2);
+        }
+        #popupCloseButton:hover {
+            background: #5a6268;
+            box-shadow: 0 6px 15px rgba(90, 98, 104, 0.3);
+        }
+
+        /* Overlay untuk pop-up */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.65);
+            display: none;
+            z-index: 1000;
+            cursor: pointer;
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
+        }
+
+        /* Bagian Layanan */
+        .services {
+            padding: 5rem 2rem;
+            background: #f8f9fa;
+        }
+
+        .services h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3.5rem;
+            color: #333;
+            font-weight: 700;
+        }
+
+        .services-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .service-card {
+            background: white;
+            padding: 2.5rem 2rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.07);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .service-card i {
+            font-size: 3rem;
+            color: #00a8ff;
+            margin-bottom: 1.5rem;
+        }
+        .service-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 0.75rem;
+            color: #333;
+            font-weight: 600;
+        }
+        .service-card p {
+            font-size: 1rem;
+            color: #555;
+            line-height: 1.6;
+            flex-grow: 1;
+            margin-bottom: 1rem;
+        }
+         .service-card p strong {
+             display: block;
+             margin-top: 1rem;
+             color: #333;
+             font-size: 1.1rem;
+             font-weight: 700;
+         }
+
+        /* Bagian Portofolio */
+        .portfolio {
+            padding: 5rem 2rem;
+            background: #fff;
+        }
+
+        .portfolio h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3.5rem;
+            color: #333;
+            font-weight: 700;
+        }
+
+        .portfolio-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .portfolio-item {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.07);
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .portfolio-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .portfolio-image {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+        .portfolio-item:hover .portfolio-image {
+            transform: scale(1.05);
+        }
+
+        .portfolio-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .portfolio-title {
+            font-size: 1.4rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .portfolio-category {
+            display: inline-block;
+            background: #e0f7ff;
+            color: #007bff;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            align-self: flex-start;
+        }
+
+        .portfolio-description {
+            color: #555;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            flex-grow: 1;
+        }
+
+        /* Bagian Kontak */
+        .contact {
+            background: #f8f9fa;
+            padding: 5rem 2rem;
+        }
+         .contact h2 {
+             text-align: center;
+             font-size: 2.5rem;
+             margin-bottom: 3.5rem;
+             color: #333;
+             font-weight: 700;
+         }
+
+        .contact-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 3rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.07);
+        }
+
+        .contact-form {
+            display: grid;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            padding: 1rem;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            border-color: #80bdff;
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+        }
+
+         .contact-form textarea {
+             resize: vertical;
+             min-height: 120px;
+         }
+         .contact-form button {
+             justify-self: center;
+             width: auto;
+             padding: 1rem 3rem;
+             margin-top: 1rem;
+         }
+
+        /* Footer */
+        footer {
+            background: #343a40;
+            color: #adb5bd;
+            padding: 4rem 2rem 2rem;
+            text-align: center;
+        }
+         footer .logo {
+             margin-bottom: 1.5rem;
+             color: #00a8ff;
+             font-size: 1.8rem;
+         }
+
+        .social-icons {
+            margin: 1.5rem 0 2rem;
+        }
+
+        .social-icons a {
+            color: #adb5bd;
+            margin: 0 1rem;
+            font-size: 1.6rem;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: #00a8ff;
+            transform: scale(1.1);
+        }
+         footer p {
+             font-size: 0.9rem;
+             color: #6c757d;
+         }
+
+        /* Animasi Fade In on Scroll */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Desain Responsif */
+
+        @media (min-width: 769px) {
+            .popup-content {
+                top: 50%;
+                transform: translate(-50%, -50%);
+                padding: 2rem;
+            }
+             @keyframes fadeInScale {
+                 from { opacity: 0; transform: translate(-50%, -50%) scale(0.95); }
+                 to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+             }
+             .popup-content h2 {
+                 font-size: 1.75rem;
+             }
+             .popup-content p {
+                 font-size: 1rem;
+             }
+        }
+
+        @media (max-width: 992px) {
+            .services-container,
+            .portfolio-grid {
+                gap: 1.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+             .hero p {
+                 font-size: 1.1rem;
+             }
+
+            .services-container,
+            .portfolio-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .cta-button {
+                font-size: 1rem;
+                padding: 0.8rem 1.5rem;
+            }
+             .services h2, .portfolio h2, .contact h2 {
+                 font-size: 2rem;
+                 margin-bottom: 2.5rem;
+             }
+             .popup-content {
+                 width: 92%;
+                 padding: 1.5rem;
+             }
+             .popup-content h2 {
+                 font-size: 1.5rem;
+             }
+             .popup-content p {
+                 font-size: 0.9rem;
+             }
+             .popup-content button {
+                 padding: 0.8rem 1rem;
+                 font-size: 0.95rem;
+             }
+
+             .contact-container {
+                 padding: 2rem;
+             }
+             footer {
+                 padding: 3rem 1rem 1.5rem;
+             }
+             .services, .portfolio, .contact {
+                 padding: 3rem 1rem;
+             }
+             .contact-form {
+                 gap: 1rem;
+             }
+             .contact-form button {
+                 padding: 0.8rem 2rem;
+             }
+             .social-icons a {
+                 font-size: 1.4rem;
+                 margin: 0 0.7rem;
+             }
+             nav {
+                 padding: 1rem;
+             }
+             .logo {
+                 font-size: 1.6rem;
+             }
+        }
+    </style>
+    <script>
+        // Menonaktifkan klik kanan di seluruh halaman
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        // Menonaktifkan beberapa pintasan keyboard untuk mencoba mencegah tampilan source code
+        document.addEventListener('keydown', function(e) {
+            // Cegah F12, Ctrl+Shift+I, Ctrl+Shift+J, dan Ctrl+U
+            if (e.keyCode === 123 || 
+                (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) ||
+                (e.ctrlKey && e.keyCode === 85)) {
+                e.preventDefault();
+            }
+        });
+    </script>
+</head>
+<body onselectstart="return false">
+    <header id="home">
+        <nav>
+            <div class="logo">BeeyVision</div>
+            <div class="nav-links">
+                <a href="#home">Beranda</a>
+                <a href="#services">Layanan</a>
+                <a href="#portfolio">Portofolio</a>
+                <a href="#contact">Kontak</a>
+            </div>
+        </nav>
+        <div class="hero">
+            <h1>Solusi IT Inovatif untuk Bisnis Anda</h1>
+            <p>Kami menyediakan solusi teknologi terkini untuk membantu bisnis tumbuh dan sukses di era digital</p>
+            <button class="cta-button" id="startNowButton">Mulai Sekarang</button>
+        </div>
+    </header>
+
+    <div class="overlay" style="display: none;"></div>
+
+    <!-- Single Popup Container -->
+    <div class="popup-content" id="infoPopup" role="dialog" aria-modal="true" aria-labelledby="popupTitle">
+        <h2 id="popupTitle">Default Title</h2>
+        <p id="popupDescription">Default description text.</p>
+        <div class="button-group">
+            <button class="cta-button" id="popupContactButton" onclick="window.location.href='#contact'; closePopup()">Ke Bagian Kontak</button>
+            <button class="cta-button" id="popupCloseButton" onclick="closePopup()">Tutup</button>
+        </div>
+    </div>
+
+    <section class="services fade-in" id="services">
+        <h2>Layanan Profesional Kami</h2>
+        <div class="services-container">
+            <div class="service-card" data-title="Pengembangan Website" data-description="Solusi digital khusus untuk transformasi bisnis Anda. Kami menawarkan pengembangan website profesional dengan desain responsif yang menarik dan fungsional. Tim kami akan membantu Anda membangun kehadiran online yang kuat dengan fitur-fitur modern seperti integrasi media sosial, optimasi SEO, dan sistem manajemen konten yang mudah digunakan. Harga mulai dari Rp 10.000.000 tergantung kompleksitas proyek dan kebutuhan spesifik Anda.">
+                <i class="fas fa-laptop-code"></i>
+                <h3>Pengembangan Website</h3>
+                <p>Solusi digital khusus untuk transformasi bisnis Anda</p>
+                <p><strong>Harga: Mulai Rp 10.000.000</strong></p>
+            </div>
+
+            <div class="service-card" data-title="Aplikasi Mobile" data-description="Solusi mobile untuk menjangkau pelanggan Anda. Kami mengembangkan aplikasi mobile yang inovatif untuk platform iOS dan Android. Aplikasi kami dirancang dengan fokus pada pengalaman pengguna yang intuitif, performa tinggi, dan fitur-fitur canggih seperti notifikasi push, integrasi pembayaran, dan analitik pengguna. Tim pengembang kami menggunakan teknologi terbaru untuk memastikan aplikasi Anda tetap relevan dan berfungsi optimal. Harga mulai dari Rp 15.000.000 tergantung pada kompleksitas dan fitur yang diinginkan.">
+                <i class="fas fa-mobile-alt"></i>
+                <h3>Aplikasi Mobile</h3>
+                <p>Solusi mobile untuk menjangkau pelanggan Anda</p>
+                <p><strong>Harga: Mulai Rp 15.000.000</strong></p>
+            </div>
+
+            <div class="service-card" data-title="Solusi Cloud" data-description="Infrastruktur modern untuk bisnis digital. Layanan cloud kami menawarkan solusi skalabel dan aman untuk kebutuhan penyimpanan dan komputasi bisnis Anda. Kami membantu dalam migrasi ke cloud, pengoptimalan infrastruktur, dan implementasi arsitektur serverless. Dengan solusi cloud kami, Anda dapat mengurangi biaya operasional, meningkatkan keamanan data, dan memastikan ketersediaan layanan 24/7. Kami bekerja dengan penyedia cloud terkemuka seperti AWS, Azure, dan Google Cloud. Harga mulai dari Rp 20.000.000 tergantung pada skala dan kompleksitas infrastruktur.">
+                <i class="fas fa-cloud"></i>
+                <h3>Solusi Cloud</h3>
+                <p>Infrastruktur modern untuk bisnis digital</p>
+                <p><strong>Harga: Mulai Rp 20.000.000</strong></p>
+            </div>
+        </div>
+    </section>
+
+    <section class="portfolio fade-in" id="portfolio">
+        <h2>Proyek Sukses Kami</h2>
+        <div class="portfolio-grid">
+            <div class="portfolio-item" data-title="Sistem Manajemen Perusahaan" data-description="Kami mengembangkan solusi ERP komprehensif untuk industri manufaktur dengan pelacakan inventaris real-time, manajemen produksi, dan analitik berbasis AI. Sistem ini telah membantu klien kami meningkatkan efisiensi operasional sebesar 35%, mengurangi biaya inventaris sebesar 25%, dan mempercepat waktu pengambilan keputusan berkat dashboard analitik yang intuitif. Solusi ini mencakup modul manajemen rantai pasokan, pengelolaan hubungan pelanggan, dan sistem pelaporan terintegrasi yang memungkinkan visibilitas end-to-end atas seluruh operasi bisnis.">
+                <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGVudGVycHJpc2V8ZW58MHx8fHwxNjk3NjQ3NDEx&ixlib=rb-1.2.1&q=80&w=1080" alt="Perangkat Lunak Perusahaan" class="portfolio-image">
+                <div class="portfolio-content">
+                    <span class="portfolio-category">Pengembangan Web</span>
+                    <h3 class="portfolio-title">Sistem Manajemen Perusahaan</h3>
+                    <p class="portfolio-description">
+                        Solusi ERP komprehensif untuk industri manufaktur dengan fitur canggih.
+                    </p>
+                </div>
+            </div>
+
+            <div class="portfolio-item" data-title="Aplikasi Pelacak Kebugaran" data-description="Kami merancang dan mengembangkan aplikasi mobile cross-platform dengan fitur perencanaan latihan, pelacakan nutrisi, dan fitur sosial yang telah diunduh lebih dari 500.000 kali di Play Store. Aplikasi ini menawarkan pengalaman pengguna yang personal dengan program latihan yang disesuaikan, pelacakan kemajuan dengan visualisasi data, dan komunitas pendukung untuk memotivasi pengguna. Fitur unggulan termasuk integrasi dengan perangkat wearable, penghitung kalori otomatis berdasarkan aktivitas, dan sistem penghargaan gamifikasi yang meningkatkan retensi pengguna sebesar 40% dibandingkan aplikasi kebugaran serupa.">
+                <img src="https://images.unsplash.com/photo-1593642532973-d31b6557fa68?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fG1vYmlsZXxlbnwwfHx8fDE2OTc2NDc0MQ&ixlib=rb-1.2.1&q=80&w=1080" alt="Aplikasi Mobile" class="portfolio-image">
+                <div class="portfolio-content">
+                    <span class="portfolio-category">Aplikasi Mobile</span>
+                    <h3 class="portfolio-title">Aplikasi Pelacak Kebugaran</h3>
+                    <p class="portfolio-description">
+                        Aplikasi mobile cross-platform populer dengan fitur lengkap untuk kebugaran.
+                    </p>
+                </div>
+            </div>
+
+            <div class="portfolio-item" data-title="Migrasi Cloud Perbankan" data-description="Kami berhasil melaksanakan migrasi infrastruktur cloud yang aman untuk institusi keuangan dengan kepatuhan SLA 99.99% dan sistem pemulihan bencana yang handal. Proyek ini mencakup migrasi lebih dari 200 aplikasi dan 5 petabyte data dari infrastruktur lokal ke arsitektur cloud hybrid. Implementasi kami mencakup enkripsi data end-to-end, otentikasi multi-faktor, dan sistem pemantauan keamanan real-time untuk memenuhi standar kepatuhan perbankan yang ketat. Hasilnya adalah pengurangan biaya infrastruktur sebesar 40%, peningkatan kecepatan deployment aplikasi baru sebesar 70%, dan peningkatan ketahanan sistem terhadap gangguan.">
+                <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGNsYXVkfGVufDB8fHx8MTY5NzY0NzQx&ixlib=rb-1.2.1&q=80&w=1080" alt="Infrastruktur Cloud" class="portfolio-image">
+                <div class="portfolio-content">
+                    <span class="portfolio-category">Solusi Cloud</span>
+                    <h3 class="portfolio-title">Migrasi Cloud Perbankan</h3>
+                    <p class="portfolio-description">
+                        Migrasi infrastruktur cloud aman dan patuh standar untuk institusi keuangan.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact fade-in" id="contact">
+         <h2>Hubungi Kami</h2>
+        <div class="contact-container">
+            <form class="contact-form" action="#" method="post">
+                <input type="text" name="name" placeholder="Nama Anda" required>
+                <input type="email" name="email" placeholder="Alamat Email Anda" required>
+                <textarea name="message" rows="5" placeholder="Pesan Anda..." required></textarea>
+                <button type="submit" class="cta-button">Kirim Pesan</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="logo">BeeyVision</div>
+        <div class="social-icons">
+            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        </div>
+        <p>&copy; 2025 BeeyVision. Hak Cipta Dilindungi</p>
+    </footer>
+
+    <script>
+        const popup = document.getElementById('infoPopup');
+        const overlay = document.querySelector('.overlay');
+        const popupTitle = document.getElementById('popupTitle');
+        const popupDescription = document.getElementById('popupDescription');
+        const popupContactButton = document.getElementById('popupContactButton');
+        const popupCloseButton = document.getElementById('popupCloseButton');
+
+        // --- Event Listeners ---
+
+        document.getElementById('startNowButton').addEventListener('click', () => {
+            showPopup(
+                "Mulai Perjalanan Digital Anda Bersama Kami",
+                "Kami siap membantu Anda dalam mengembangkan solusi IT yang sesuai dengan kebutuhan bisnis Anda.",
+                true
+            );
+        });
+
+        document.querySelectorAll('.service-card').forEach(card => {
+            card.addEventListener('click', () => {
+                showPopup(
+                    card.dataset.title,
+                    card.dataset.description,
+                    false
+                );
+            });
+        });
+
+        document.querySelectorAll('.portfolio-item').forEach(item => {
+            item.addEventListener('click', () => {
+                showPopup(
+                    item.dataset.title,
+                    item.dataset.description,
+                    false
+                );
+            });
+        });
+
+        overlay.addEventListener('click', closePopup);
+        popupCloseButton.addEventListener('click', closePopup);
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && popup.style.display === 'block') {
+                closePopup();
+            }
+        });
+
+        // --- Functions ---
+
+        function showPopup(title, description, isStartNow = false) {
+            // Menambahkan emoticon di judul pop-up
+            popupTitle.innerHTML = "🚀 " + title;
+            if (isStartNow) {
+                // Tambahkan penjelasan tambahan dengan emotikon untuk popup "Start Now"
+                popupDescription.innerHTML = description + "<br/><br/><span style='font-size:1.1rem;'>✨ Silakan hubungi kami untuk konsultasi gratis dan penawaran khusus. Informasi mendalam akan langsung dikomunikasikan oleh tim ahli kami.</span>";
+            } else {
+                // Tambahkan penjelasan tambahan dengan emotikon untuk pop-up lainnya
+                popupDescription.innerHTML = description + "<br/><br/><span style='font-size:1.1rem;'>ℹ️ Untuk informasi lebih lanjut, silakan hubungi tim kami. Kami siap membantu menjawab pertanyaan Anda secara detail.</span>";
+            }
+
+            popupContactButton.style.display = isStartNow ? 'block' : 'none';
+
+            popup.style.display = 'block';
+            overlay.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+
+            setTimeout(() => {
+                 popupCloseButton.focus();
+            }, 0);
+        }
+
+        function closePopup() {
+            if (popup.style.display !== 'block') return;
+
+            popup.style.display = 'none';
+            overlay.style.display = 'none';
+            document.body.style.overflow = '';
+
+            // Jika ingin mengembalikan fokus pada elemen yang membuka pop-up, bisa ditambahkan tracking
+        }
+
+        // --- Scroll Animation using Intersection Observer ---
+        const fadeInElements = document.querySelectorAll('.fade-in');
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observerCallback = (entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        };
+
+        const observer = new IntersectionObserver(observerCallback, observerOptions);
+        fadeInElements.forEach(el => observer.observe(el));
+
+        // --- Contact Form Handling (Placeholder) ---
+        const contactForm = document.querySelector('.contact-form');
+        if (contactForm) {
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                alert('Terima kasih! Pesan Anda telah terkirim (simulasi).');
+                contactForm.reset();
+            });
+        }
+    </script>
+</body>
+</html>
